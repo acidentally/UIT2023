@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: testc.cpp
+File name: J.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 08:49:40
+Created since : 12/09/2023 ~~ 10:13:35
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,10 +37,29 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e5 + 10;
+int const maxn      =       1e6 + 10;
 int const INF       =       1e18;
  
-
+struct DSU {
+    vi p;
+    DSU() : p(maxn) {}
+    void createDSU(int l) {
+    for(int i = 1; i <= l; i++) p[i] = i;
+    }
+    }
+    int find(int v) {
+        if(v == p[v]) return v;
+        return p[v] = find(p[v]);
+    }
+    void make(int i) {
+        p[i] = i;
+    }
+    void connect(int u, int v) {
+        u = find(u); v = find(v);
+        p[u] = v;
+    }
+} g1;
+int n, m;
 void solve() {
     
 }

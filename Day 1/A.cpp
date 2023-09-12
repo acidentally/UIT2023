@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: testc.cpp
+File name: A.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 08:49:40
+Created since : 12/09/2023 ~~ 09:07:22
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,17 +37,32 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e5 + 10;
+int const maxn      =       200;
 int const INF       =       1e18;
  
-
+int b, x;
+map<int, vector<string> > m;
+string s;
 void solve() {
-    
+    cin >> b;
+    for(int i = 1; i <= b; i++) {
+        cin >> s >> x;
+        m[x].pb(s);
+    }
+    for(auto s : m) {
+        if(s.se.size() == 7) {
+            vector<string> a = s.se;
+            sort(all(a));
+            for(auto thing : a) cout << thing << ' ';
+            return;
+        }
+    }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    //File?
+    freopen("7-dwarfs.INP", "r", stdin);
+    freopen("7-dwarfs.OUT", "w", stdout);
     solve();
 }
 

@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: testc.cpp
+File name: B.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 08:49:40
+Created since : 12/09/2023 ~~ 09:13:52
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,17 +37,45 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e5 + 10;
+int const maxn      =       500;
 int const INF       =       1e18;
  
-
+int n, m, u, v;
+bool a[55][55] = {};
 void solve() {
-    
+    cin >> n >> m;
+    if(m == 0) {
+        cout << 3;
+        return;
+    }
+    while(m--) {
+        cin >> u >> v;
+        a[u][v] = a[v][u] = 1;
+    }
+    int ans = 3;
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= n; j++) {
+            if(i == j || !a[i][j]) continue;
+            for(int k = 1; k <= n; k++) {
+                int cur = 2;
+                if(k == i || k == j) continue;
+                if(a[i][k]) cur--;
+                if(a[k][j]) cur--;
+                minimize(ans, cur);
+                if(ans == 0) {
+                    cout << 0;
+                    exit(0);
+                }
+            }
+        }
+    }
+    cout << ans;
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    //File?
+    // freopen("triangle-graph.INP", "r", stdin);
+    // freopen("triangle-graph.OUT", "w", stdout);
     solve();
 }
 
