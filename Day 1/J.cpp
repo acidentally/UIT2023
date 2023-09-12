@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: J.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 10:13:35
+Created since : 12/09/2023 ~~ 13:24:45
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,36 +37,22 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e6 + 10;
+int const maxn      =       1e5 + 10;
 int const INF       =       1e18;
  
-struct DSU {
-    vi p;
-    DSU() : p(maxn) {}
-    void createDSU(int l) {
-    for(int i = 1; i <= l; i++) p[i] = i;
-    }
-    }
-    int find(int v) {
-        if(v == p[v]) return v;
-        return p[v] = find(p[v]);
-    }
-    void make(int i) {
-        p[i] = i;
-    }
-    void connect(int u, int v) {
-        u = find(u); v = find(v);
-        p[u] = v;
-    }
-} g1;
-int n, m;
+int n; 
 void solve() {
-    
+    cin >> n;
+    cout << n;
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
     //File?
+    #ifdef ONLINE_JUDGE
+    freopen("dijkstra.INP", "r", stdin);
+    freopen("dijkstra.OUT", "w", stdout);
+    #endif // ONLINE_JUDGE
     solve();
 }
 

@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: D.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 11:02:18
+Created since : 12/09/2023 ~~ 12:43:15
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -41,55 +41,50 @@ int const maxn      =       1e6 + 10;
 int const INF       =       1e18;
 int const N         =       1e7 + 5;
  
-struct DSU {
-    vi p;
-    DSU() : p(maxn) {}
-    void createDSU(int l) {
-        for(int i = 1; i <= l; i++) p[i] = i;
-    }
-    int find(int v) {
-        if(v == p[v]) return v;
-        return p[v] = find(p[v]);
-    }
-    void connect(int u, int v) {
-        u = find(u); v = find(v);
-        p[u] = v;
-    }
-} g1;
-
-int n, k, q, u, v;
-int x;
-vi back[N] = {};
-bool check[maxn] = {};
+//DSU--------------
+int p[maxn] = {};
+int find(int k) {
+    if(k == p[k]) return k;
+    return p[k] = find(p[k]);
+}
+void connect(int u, int v) {
+    u = find(u); v = find(v);
+    p[u] = v;
+}
+//DSU--------------
+int n, k, q, x;
+vi a[N + 1] = {};
+bool check[N + 1] = {};
+int u, v;
 void solve() {
     cin >> n >> k >> q;
-    g1.createDSU(n + 10);
     for(int i = 1; i <= n; i++) {
+        p[i] = i;
         cin >> x;
-        back[x].pb(i);
+        a[x].pb(i);
     }
-    for(int i = k; i <= N; i++) {
+    for(int i = k + 1; i < N; i++) {
         if(check[i]) continue;
-        int idx = -1;
-        for(int j = i; j <= N; j += i) {
-            check[j] = 1;
-            for(auto s : back[j]) {
+        int idx = -1;   
+        for(int j = i; j < N; j += i) {
+            check[j] = true;
+            for(auto s : a[j]) {
                 if(idx < 0) idx = s;
-                else g1.connect(idx, s);
+                else connect(idx, s);
             }
         }
     }
     while(q--) {
         cin >> u >> v;
-        if(g1.find(u) == g1.find(v)) cout << "Y";
-        else cout << "N";
+        if(find(u) != find(v)) cout << "N";
+        else cout << "Y";
     }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    // freopen("gcd-graph.INP", "r", stdin);
-    // freopen("gcd-graph.OUT", "w", stdout);
+    freopen("gcd-graph.INP", "r", stdin);
+    freopen("gcd-graph.OUT", "w", stdout);
     solve();
 }
 
