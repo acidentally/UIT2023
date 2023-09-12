@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: J.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 13:24:45
+Created since : 12/09/2023 ~~ 14:03:51
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -36,23 +36,39 @@ typedef vector<int>         vi;
 typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
+typedef pair<string, int>   psi;
 int const mod       =       1e9 + 7;
 int const maxn      =       1e5 + 10;
 int const INF       =       1e18;
+int const N         =       150010;
  
-int n; 
+int n, m, u, v, c, s, t;
+string str;
+psi a[maxn] = {};
+string d[maxn] = {};
+void Dijkstra() {
+    priority_queue<psi, vector<psi>, greater<psi> > q;
+    for(int i = 0; i < N; i++) str[i] = '1';
+}
 void solve() {
-    cin >> n;
-    cout << n;
+    cin >> n >> m;
+    str.resize(N);
+    while(m--) {
+        cin >> u >> v >> c;
+        str[c] = 1;
+        a[u].pb({s, v});
+        a[v].pb({s, u});
+    }
+    cin >> s >> t;
+    Dijkstra();
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    //File?
     #ifdef ONLINE_JUDGE
     freopen("dijkstra.INP", "r", stdin);
     freopen("dijkstra.OUT", "w", stdout);
-    #endif // ONLINE_JUDGE
+    #endif //ONLINE JUDGE
     solve();
 }
 
