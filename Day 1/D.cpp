@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: D.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 10:16:25
+Created since : 12/09/2023 ~~ 11:02:18
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -39,6 +39,7 @@ typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
 int const maxn      =       1e6 + 10;
 int const INF       =       1e18;
+int const N         =       1e7 + 5;
  
 struct DSU {
     vi p;
@@ -56,30 +57,30 @@ struct DSU {
     }
 } g1;
 
-int n, k, q, u, v, x;
-vector<pi> a;
-int val[maxn] = {};
+int n, k, q, u, v;
+int x;
+vi back[N] = {};
+bool check[maxn] = {};
 void solve() {
     cin >> n >> k >> q;
     g1.createDSU(n + 10);
     for(int i = 1; i <= n; i++) {
         cin >> x;
-        if(x >= k) a.pb(mp(x, i));
+        back[x].pb(i);
     }
-    int tplt = n - 1;
-    n = a.size();
-    for(int i = 0; i < n && tplt; i++) {
-        for(int j = i + 1; j < n && tplt; j++) {
-            if(g1.find(a[i].se) == g1.find(a[j].se)) continue;
-            if(__gcd(a[i].fi, a[j].fi) >= k) {g1.connect(a[i].se, a[j].se); tplt--;}
+    for(int i = k; i <= N; i++) {
+        if(check[i]) continue;
+        int idx = -1;
+        for(int j = i; j <= N; j += i) {
+            check[j] = 1;
+            for(auto s : back[j]) {
+                if(idx < 0) idx = s;
+                else g1.connect(idx, s);
+            }
         }
     }
     while(q--) {
         cin >> u >> v;
-        if(tplt == 0) {
-            cout << "Y";
-            continue;
-        }
         if(g1.find(u) == g1.find(v)) cout << "Y";
         else cout << "N";
     }
@@ -87,8 +88,8 @@ void solve() {
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    freopen("gcd-graph.INP", "r", stdin);
-    freopen("gcd-graph.OUT", "w", stdout);
+    // freopen("gcd-graph.INP", "r", stdin);
+    // freopen("gcd-graph.OUT", "w", stdout);
     solve();
 }
 
