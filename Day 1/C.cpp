@@ -3,13 +3,13 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: C.cpp
 Code by : acident / lckintrovert
-Created since : 12/09/2023 ~~ 09:24:19
+Created since : 12/09/2023 ~~ 16:42:32
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
 using namespace std;
  
-#define int                 long long
+// #define int                 long long
 #define uint                unsigned long long
 #define dub                 double
 #define fi                  first
@@ -37,43 +37,87 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       5e3 + 10;
-int const INF       =       1e18;
- 
-int n, m;
-int u, v, w;
-vector<pi> a[maxn] = {};
-int low[maxn] = {}, ids[maxn] = {}, id = 0;
-stack<int> st;
-bool onStack[maxn] = {};
-void dfs(int k, int p = -1) {
-    low[k] = ids[k] = ++id;
-    onStack[k] = 1;
-    st.push(k);
-    for(auto s : a[k]) {
-        if(s.fi == p) continue;
-        dfs(s.se);
-    }
-}
-void solve() {
-    cin >> n >> m;
-    int minw = INF, maxw = 0;
-    while(m--) {
+int const maxn      =       5e4 + 50;
+int const INF       =       (1ll << 30) - 1;
+
+struct Edge {
+    int u, v, w;
+    Edge(int f = 0, int t = 0, int c = 0) : u(f), v(t), w(c) {}
+    void input() {
         cin >> u >> v >> w;
-        a[u].pb(mp(v, w));
-        a[v].pb(mp(u, w));
-        minimize(minw, w);
-        maximize(maxw, w);
     }
-    dfs(1);
+    bool operator < (const Edge &e) const {
+        return w < e.w;
+    }
+} e[maxn];
+
+vi a[maxn];
+int vertex, paths;
+bool checked[maxn];
+int low[maxn], ids[maxn];
+int id = 0, tplt = 0;
+stack<int> st;
+void dfs(int u) {
+    low[u] = ids[u] = ++id;
+    st.push(u);
+    for(auto v : a[u]) {
+        if(!checked[v]) {
+            if(ids[v] == 0) {
+                dfs(v);
+                minimize(low[u], low[v]);
+            } else minimize(low[u], ids[v]);
+        }
+    }
+    if(low[u] == ids[u]) {
+        if(++tplt > 1) throw -1;
+        while(1) {
+            int v = st.top(); st.pop();
+            checked[v] = true;
+            if (u == v) break;
+        }
+    }
 }
+
+bool ask(int l, int r) {
+    if (l > r) return 0;
+    memset(low, 0, (vertex + 1) * 10);
+    memset(ids, 0, (vertex + 1) * 10);
+    memset(checked, false, (vertex + 1) * 10);
+    for(int i = 1; i <= vertex; i++) a[i].clear();
+    id = tplt = 0;
+    while (!st.empty()) st.pop();
+    for(int i = l; i <= r; i++) a[e[i].u].push_back(e[i].v);
+    for(int i = 1; i <= vertex; i++) {
+        if (ids[i] == 0) {
+            try {
+                dfs(i);
+            } catch (int x) {
+                return 0;
+            }
+        }
+    }
+    return (tplt == 1);
+}
+
+void solve() {
+    cin >> vertex >> paths;
+    for(int i = 1; i <= paths; i++) e[i].input();
+    sort(e + 1, e + paths + 1);
+    int res = INF, r = 1;
+    for(int l = 1; l <= paths; l++) {
+        while (r <= paths && !ask(l, r)) r++;
+        if (r > paths) break;
+        minimize(res, e[r].w - e[l].w);
+    }
+    cout << (res < INF ? res : -1) << endl;
+}
+
 signed main() {
-    ios_base:: sync_with_stdio(0);
-    cin.tie(NULL); cout.tie(NULL);
-    //File?
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+    #ifdef ONLINE_JUDGE
+    freopen("scc.inp", "r", stdin);
+    freopen("scc.out", "w", stdout);
+    #endif 
     solve();
 }
-
-/*A place to scribble thoughts
-
-*/

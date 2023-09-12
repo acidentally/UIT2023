@@ -83,8 +83,10 @@ void solve() {
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
+    #ifdef ONLINE_JUDGE
     freopen("gcd-graph.INP", "r", stdin);
     freopen("gcd-graph.OUT", "w", stdout);
+    #endif 
     solve();
 }
 
