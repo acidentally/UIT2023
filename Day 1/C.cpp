@@ -80,9 +80,9 @@ void dfs(int u) {
 
 bool ask(int l, int r) {
     if (l > r) return 0;
-    memset(low, 0, (vertex + 1) * 10);
     memset(ids, 0, (vertex + 1) * 10);
     memset(checked, false, (vertex + 1) * 10);
+    memset(low, 0, (vertex + 1) * 10);
     for(int i = 1; i <= vertex; i++) a[i].clear();
     id = tplt = 0;
     while (!st.empty()) st.pop();
