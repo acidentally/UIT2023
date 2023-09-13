@@ -79,7 +79,7 @@ void compute() {
                     for(int y = 0; y < 3; y++) {
                         if((x + y <= intersec) && (3 - x <= u_sat) && (2 - y <= v_sat)) {
                             (ans += (1ll * C[3 - x][u_sat] % mod * C[2 - y][v_sat] % mod) *
-                                   (C[x][intersec] % mod * C[y][intersec - x] % mod) % mod) %= mod;
+                                   (C[y][intersec] % mod * C[x][intersec - y] % mod) % mod) %= mod;
                         }
                     }
                 }
