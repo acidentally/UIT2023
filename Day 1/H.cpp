@@ -61,7 +61,9 @@ void solve() {
         cout << "No" << endl;
         return;
     }
-    
+    for(int i = 1; i <= n; i++) {
+        
+    }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
