@@ -45,16 +45,23 @@ int a[maxn] = {};
 void solve() {
     cin >> n;
     stack<int> st;
+    bool found = 1;
     for(int i = 1; i <= n; i++) {
         cin >> a[i];
-        if(i == st.top()) st.pop();
-        if(a[i] > st.top()) {
-            cout << "No";
-            return;
+        if(!st.empty() && i == st.top()) st.pop();
+        if(a[i] == -1) continue;
+        if(!st.empty() && a[i] > st.top()) {
+            cerr << a[i] << ' ' << st.top() << endl;
+            found = 0;
         }
-        if(a[i] == st.top()) continue;
+        if(!st.empty() && a[i] == st.top()) continue;
         st.push(a[i]);
-    }  cout << 'y' << endl;
+    } 
+    if(!found) {
+        cout << "No" << endl;
+        return;
+    }
+    
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
@@ -63,7 +70,8 @@ signed main() {
     freopen("recover.INP", "r", stdin);
     freopen("recover.OUT", "w", stdout);
     #endif //ONLINE JUDGE
-    int theta, tau; cin >> theta >> tau;
+    int theta, tau; 
+    cin >> theta >> tau;
     while(tau--) solve();
 }
 
