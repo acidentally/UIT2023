@@ -44,9 +44,17 @@ int n;
 int a[maxn] = {};
 void solve() {
     cin >> n;
+    stack<int> st;
     for(int i = 1; i <= n; i++) {
         cin >> a[i];
-    }   
+        if(i == st.top()) st.pop();
+        if(a[i] > st.top()) {
+            cout << "No";
+            return;
+        }
+        if(a[i] == st.top()) continue;
+        st.push(a[i]);
+    }  cout << 'y' << endl;
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
