@@ -9,7 +9,7 @@ Literally the worst cp-er ever
 #include <bits/stdc++.h>
 using namespace std;
 
-// #define int                 long long
+#define int                 long long
 #define uint                unsigned long long
 #define dub                 double
 #define fi                  first
@@ -53,12 +53,13 @@ int divMod(int c) {
 //End of code
 
 //Finding the shortest path
+// uint d[maxn][2500] = {};
 inline void Dijkstra(void) {
 
 }
 
 int n, m, u, v, c;
-inline void solve(void) {
+void solve(void) {
     cin >> n >> m;
     while(m--) {
         cin >> u >> v >> c;

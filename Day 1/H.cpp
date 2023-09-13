@@ -37,33 +37,37 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       (1 << 19) + 10;
 int const INF       =       1e18;
  
-int n; 
-int a[maxn] = {};
-void solve() {
+int n, x;
+inline void solve() {
     cin >> n;
-    stack<int> st;
-    bool found = 1;
+    stack<pi> st;
+    vi a(n + 10);
+    int cnt = 1;
+    bool b = 1;
+    int l = 0;
     for(int i = 1; i <= n; i++) {
-        cin >> a[i];
-        if(!st.empty() && i == st.top()) st.pop();
-        if(a[i] == -1) continue;
-        if(!st.empty() && a[i] > st.top()) {
-            cerr << a[i] << ' ' << st.top() << endl;
-            found = 0;
+        while(!st.empty() && st.top().se == i) {
+            a[st.top().fi] = cnt++;
+            st.pop();
         }
-        if(!st.empty() && a[i] == st.top()) continue;
-        st.push(a[i]);
-    } 
-    if(!found) {
+        cin >> x;
+        if(x == -1) x = i + 1;
+        if(x <= i || (!st.empty() && x > st.top().se)) b = 0;
+        st.push(mp(i, x));
+    }
+    if(!b) {
         cout << "No" << endl;
         return;
     }
-    for(int i = 1; i <= n; i++) {
-        
+    while(!st.empty()) {
+        a[st.top().fi] = cnt++;
+        st.pop();
     }
+    cout << "Yes" << endl;
+    for(int i = 1; i <= n; i++) cout << a[i] << ' ';
+    cout << endl;
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
