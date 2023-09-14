@@ -47,15 +47,15 @@ struct make {
 };
 
 bool check[210][650][650] = {};
-make trace[210][650][650];
+make TRACE[210][650][650];
 #define ok(i, a, b)         check[i][a][b]
-#define trace(i, a, b)      trace[i][a][b]
+#define trace(i, a, b)      TRACE[i][a][b]
 
 int n;
 int v[maxn] = {};
 char couting[maxn] = {};
 inline void solve() {
-    if(n == 0) exit(0);
+    if(n == 0) return;
     for(int i = 1; i <= n; i++) {
         cin >> v[i];
     }
@@ -67,7 +67,7 @@ inline void solve() {
                     ok(i, a, b) = true;
                     ok(i, a ^ v[i], b) = true;
                     ok(i, a, b ^ v[i]) = true;
-                    
+
                     trace(i, a, b) = make(i - 1, a, b);
                     trace(i, a ^ v[i], b) = make(i - 1, a, b);
                     trace(i, a, b ^ v[i]) = make(i - 1, a, b);
@@ -78,13 +78,13 @@ inline void solve() {
     int sum = 0, ans = 0;
     make ending;
     for(int i = 1; i <= n; i++) sum ^= v[i];
-    for(int a = 0; a <= 600; a++) 
-        for(int b = 0; b <= 600; b++) 
-            if(ok(n, a, b)) {
-                if(maximize(ans, a + b + sum ^ a ^ b)) {
-                    ending = make(n, a, b);
-                }
+    for(int a = 0; a <= 600; a++) for(int b = 0; b <= 600; b++) {
+        if(ok(n, a, b)) {
+            if(maximize(ans, a + b + sum ^ a ^ b)) {
+                ending = make(n, a, b);
             }
+        }
+    }
     cout << ans << endl;
 }
 signed main() {
@@ -96,7 +96,7 @@ signed main() {
     #endif //ONLINE JUDGE
 
     int subtask; cin >> subtask;
-    while(cin >> n) solve();
+    solve();
 }
 
 /*A place to scribble thoughts
