@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: J.cpp
+File name: Ever2.cpp
 Code by : acident / lckintrovert
-Created since : 14/09/2023 ~~ 08:55:27
+Created since : 14/09/2023 ~~ 11:31:51
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -40,24 +40,59 @@ int const mod       =       1e9 + 7;
 int const maxn      =       1e5 + 10;
 int const INF       =       1e18;
 
-struct bigNum {
-    bitset<150020> a;
+struct Edge {
+    int u, v, w;
+    Edge() = default;
+    Edge(int u_, int v_, int w_) : u(u_), v(v_), w(w_) {}
+    bool operator < (const Edge &e) const {
+        return w < e.w;
+    }
 };
-bigNum d[maxn] = {};
-int n, m, u, v, c;
+
+vector<Edge> edges;
+Edge cur;
+vector<pi> a[maxn] = {};
+int n, q, u, v, w, l, r;
+int cnt, temp = 0, absNot, curW;
+void dfs(int k, int p = -1) {
+    for(auto s : a[k]) {
+        if(s.se >= curW || s.fi == absNot || s.fi == p) continue;
+        cnt++;
+        dfs(s.fi, k);
+    }
+}
 inline void solve() {
-    cin >> n >> m;
-    while(m--) {
-        cin >> u >> v >> c;
+    cin >> n >> q;
+    for(int i = 1; i < n; i++) {
+        cin >> u >> v >> w;
+        edges.pb(Edge(u, v, w));
+        a[u].pb(mp(v, w));
+        a[v].pb(mp(u, w));
+    }
+    sort(all(edges));
+    cerr << endl;
+    while(q--) {
+        cin >> l >> r;
+        int ans = 0;
+        // cerr << l << ' ' << r << endl;
+        for(auto s : edges) {
+            if(s.w > r) break;
+            if(s.w >= l) {
+                cnt = 1; absNot = s.v; curW = s.w;
+                dfs(s.u);
+                temp = cnt;
+                cnt = 1; absNot = s.u;
+                dfs(s.v);
+                ans += temp * cnt;
+            }
+        }
+        cout << ans << ' ';
     }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    #ifdef ONLINE_JUDGE
-    freopen("Dijkstra.INP", "r", stdin);
-    freopen("Dijkstra.OUT", "w", stdout);
-    #endif //ONLINE JUDGE
+    //File?
     solve();
 }
 

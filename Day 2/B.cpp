@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: J.cpp
+File name: B.cpp
 Code by : acident / lckintrovert
-Created since : 14/09/2023 ~~ 08:55:27
+Created since : 14/09/2023 ~~ 09:58:57
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,26 +37,38 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e5 + 10;
+int const maxn      =       50;
 int const INF       =       1e18;
 
-struct bigNum {
-    bitset<150020> a;
-};
-bigNum d[maxn] = {};
-int n, m, u, v, c;
+int n, x;
+vector<pi> a;
 inline void solve() {
-    cin >> n >> m;
-    while(m--) {
-        cin >> u >> v >> c;
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> x;
+        a.pb(mp(x, i));
     }
+    sort(all(a));
+    vi couting;
+    int penalty = 0, time = 0, num = 0;
+    for(auto s : a) {
+        if(time + s.fi <= 300) {
+            num++;
+            time += s.fi;
+            couting.pb(s.se);
+            penalty += time;
+        }   
+        else break;
+    }
+    cout << num << ' ' << penalty << ' ' << time << endl;
+    for(auto s : couting) cout << char(s + 'A');
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
     #ifdef ONLINE_JUDGE
-    freopen("Dijkstra.INP", "r", stdin);
-    freopen("Dijkstra.OUT", "w", stdout);
+    freopen("icpc.INP", "r", stdin);
+    freopen("icpc.OUT", "w", stdout);
     #endif //ONLINE JUDGE
     solve();
 }

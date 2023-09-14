@@ -46,7 +46,7 @@ struct Edge {
     void input() {
         cin >> u >> v >> w;
     }
-    bool operator < (const Edge &e) const {
+    bool operator < (const Edge &e) {
         return w < e.w;
     }
 } e[maxn];
@@ -83,8 +83,10 @@ bool ask(int l, int r) {
     memset(ids, 0, (vertex + 1) * 10);
     memset(checked, false, (vertex + 1) * 10);
     memset(low, 0, (vertex + 1) * 10);
+
     for(int i = 1; i <= vertex; i++) a[i].clear();
     id = tplt = 0;
+    
     while (!st.empty()) st.pop();
     for(int i = l; i <= r; i++) a[e[i].u].push_back(e[i].v);
     for(int i = 1; i <= vertex; i++) {
