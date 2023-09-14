@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: E.cpp
 Code by : acident / lckintrovert
-Created since : 14/09/2023 ~~ 10:59:55
+Created since : 14/09/2023 ~~ 16:16:02
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,100 +37,66 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e5 + 10;
+int const maxn      =       700;
 int const INF       =       1e18;
 
-struct Edge {
-    int u, v, w;
-    Edge() = default;
-    Edge(int u_, int v_, int w_) : u(u_), v(v_), w(w_) {}
-    bool operator < (const Edge &e) const {
-        return w < e.w;
-    }
+struct make {
+    int i, a, b;
+    make() = default;
+    make(int i_, int a_, int b_) : i(i_), a(a_), b(b_) {}
 };
-vector<Edge> edges;
-int n, q, u, v, w;
-int l, r, ans1, ans2;
-vi e[maxn] = {}, temp;
-bool vis[maxn] = {};
-int cur = 0;
-void dfs(int k, int p = -1) {
-    vis[k] = 1;
-    for(auto s : e[k]) {
-        if(s == p) continue;
-        cur++;
-        dfs(s, k);
-    }
-}
+
+bool check[210][650][650] = {};
+make trace[210][650][650];
+#define ok(i, a, b)         check[i][a][b]
+#define trace(i, a, b)      trace[i][a][b]
+
+int n;
+int v[maxn] = {};
+char couting[maxn] = {};
 inline void solve() {
-    cin >> n >> q;
-    for(int i = 1; i < n; i++) {
-        cin >> u >> v >> w;
-        edges.pb(Edge(u, v, w));
+    if(n == 0) exit(0);
+    for(int i = 1; i <= n; i++) {
+        cin >> v[i];
     }
-    sort(all(edges));
-    while(q--) {
-        cin >> l >> r;
-        ans1 = ans2 = 0;
-
-        for(int i = 1; i <= n; i++) e[i].clear();
-        for(auto s : edges) {
-            if(s.w > r) break;
-            e[s.u].pb(s.v);
-            e[s.v].pb(s.u);
-        }
-        memset(vis, 0, sizeof(vis));
-        temp.clear();
-        for(int i = 1; i <= n; i++) {
-            if(!vis[i]) {
-                cur = 1;
-                dfs(i);
-                temp.pb(cur);
+    ok(0, 0, 0) = 1;
+    for(int i = 1; i <= n; i++) {
+        for(int a = 0; a <= 600; a++) {
+            for(int b = 0; b <= 600; b++) {
+                if(ok(i - 1, a, b)) {
+                    ok(i, a, b) = true;
+                    ok(i, a ^ v[i], b) = true;
+                    ok(i, a, b ^ v[i]) = true;
+                    trace(i, a, b) = make(i - 1, a, b);
+                    trace(i, a ^ v[i], b) = make(i - 1, a, b);
+                    trace(i, a, b ^ v[i]) = make(i - 1, a, b);
+                }
             }
         }
-        cur = 0;
-        for(int i = 0; i < temp.size(); i++) {
-            cur += temp[i];
-            ans1 += temp[i] * temp[i];
-        }
-        ans1 = (cur * cur - ans1) / 2;
-        for(int i = 1; i <= n; i++) e[i].clear();
-        for(auto s : edges) {
-            if(s.w >= l) break;
-            e[s.u].pb(s.v);
-            e[s.v].pb(s.u);
-        }
-
-        memset(vis, 0, sizeof(vis));
-        temp.clear();
-        for(int i = 1; i <= n; i++) {
-            if(!vis[i]) {
-                cur = 1;
-                dfs(i);
-                temp.pb(cur);
-            }
-        }
-        cur = 0;
-        for(int i = 0; i < temp.size(); i++){
-            ans2 += temp[i] * temp[i];
-            cur += temp[i];
-        }
-        ans2 = (cur * cur - ans2) / 2;
-        cout << ans2 - ans1 << ' ';
     }
+    int sum = 0, ans = 0;
+    make ending;
+    for(int i = 1; i <= n; i++) sum ^= v[i];
+    for(int a = 0; a <= 600; a++) 
+        for(int b = 0; b <= 600; b++) 
+            if(ok(n, a, b)) {
+                if(maximize(ans, a + b + sum ^ a ^ b)) {
+                    ending = make(n, a, b);
+                }
+            }
+    cout << ans << endl;
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
     #ifdef ONLINE_JUDGE
-    freopen("costquery.INP", "r", stdin);
-    freopen("costquery.OUT", "w", stdout);
+    freopen("chemistry.INP", "r", stdin);
+    freopen("chemistry.OUT", "w", stdout);
     #endif //ONLINE JUDGE
-    solve();
+    int subtask; cin >> subtask;
+    while(cin >> n) solve();
 }
 
 /*A place to scribble thoughts
-a1 a2 .... an
-ai * aj với mọi ij
-(a1 + a2 + a3 + ... + an)^2 = a1^2 + a2^2 + ... + an^2 + 2(tổng)
+
 */
