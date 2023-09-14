@@ -67,6 +67,7 @@ inline void solve() {
                     ok(i, a, b) = true;
                     ok(i, a ^ v[i], b) = true;
                     ok(i, a, b ^ v[i]) = true;
+                    
                     trace(i, a, b) = make(i - 1, a, b);
                     trace(i, a ^ v[i], b) = make(i - 1, a, b);
                     trace(i, a, b ^ v[i]) = make(i - 1, a, b);
@@ -93,6 +94,7 @@ signed main() {
     freopen("chemistry.INP", "r", stdin);
     freopen("chemistry.OUT", "w", stdout);
     #endif //ONLINE JUDGE
+
     int subtask; cin >> subtask;
     while(cin >> n) solve();
 }
