@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: E.cpp
+File name: Dver2.cpp
 Code by : acident / lckintrovert
-Created since : 14/09/2023 ~~ 10:59:55
+Created since : 14/09/2023 ~~ 14:39:04
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -36,6 +36,7 @@ typedef vector<int>         vi;
 typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
+typedef pair<pi, int>       ppi;
 int const mod       =       1e9 + 7;
 int const maxn      =       1e5 + 10;
 int const INF       =       1e18;
@@ -44,87 +45,61 @@ struct Edge {
     int u, v, w;
     Edge() = default;
     Edge(int u_, int v_, int w_) : u(u_), v(v_), w(w_) {}
-    bool operator < (const Edge &e) const {
+    bool operator < (const Edge &e) {
         return w < e.w;
     }
 };
-vector<Edge> edges;
-int n, q, u, v, w;
-int l, r, ans1, ans2;
-vi e[maxn] = {}, temp;
-bool vis[maxn] = {};
-int cur = 0;
-void dfs(int k, int p = -1) {
-    vis[k] = 1;
-    for(auto s : e[k]) {
-        if(s == p) continue;
-        cur++;
-        dfs(s, k);
+vi p, sz;
+int n;
+void init() {
+    p.resize(n + 10); sz.resize(n + 10);
+    for(int i = 1; i <= n; i++) {
+        p[i] = i;
+        sz[i] = 1;
     }
 }
-void solve() {
+int find(int k) {
+    if(k == p[k]) return k;
+    return p[k] = find(p[k]);
+}
+void connect(int u, int v) {
+    u = find(u); v = find(v);
+    if(u < v) swap(u, v);
+    p[u] = v;
+    sz[v] += sz[u];
+}
+
+vector<Edge> edges;
+vi preSum, weight;
+int q, u, v, w;
+int l, r, curAns;
+inline void solve() {
     cin >> n >> q;
+    init();
     for(int i = 1; i < n; i++) {
         cin >> u >> v >> w;
         edges.pb(Edge(u, v, w));
     }
     sort(all(edges));
+    preSum.pb(0);
+    weight.pb(0);
+    for(auto s : edges) {
+        u = s.u; v = s.v; w = s.w;
+        u = find(u); v = find(v);
+        preSum.pb(sz[u] * sz[v]);
+        connect(u, v);
+        weight.pb(w);
+    }
+    for(int i = 1; i < preSum.size(); i++) {
+        preSum[i] += preSum[i - 1];
+    }
     while(q--) {
         cin >> l >> r;
-        ans1 = ans2 = 0;
-        int cnt = 0;
-        //DFS the [1; l]
-        for(int i = 1; i <= n; i++) e[i].clear();
-        for(auto s : edges) {
-            if(s.w >= l) break;
-            cnt++;
-            e[s.u].pb(s.v);
-            e[s.v].pb(s.u);
-        }
-        memset(vis, 0, sizeof(vis));
-        temp.clear();
-        for(int i = 1; i <= n; i++) {
-            if(!vis[i]) {
-                cur = 1;
-                dfs(i);
-                temp.pb(cur);
-            }
-        }
-        //Computing sum of all pair products
-        cur = 0;
-        for(int i = 0; i < temp.size(); i++) {
-            cur += temp[i];
-            ans1 += temp[i] * temp[i];
-        }
-        ans1 = (cur * cur - ans1) / 2;
-
-        //Reuse the graph for [1, l] and extend to [1, r]
-        //And then DFS [1, r]
-        for(int i = cnt; i < edges.size(); i++) {
-            if(edges[i].w > r) break;
-            e[edges[i].u].pb(edges[i].v);
-            e[edges[i].v].pb(edges[i].u);
-        }
-
-        memset(vis, 0, sizeof(vis));
-        temp.clear();
-        for(int i = 1; i <= n; i++) {
-            if(!vis[i]) {
-                cur = 1;
-                dfs(i);
-                temp.pb(cur);
-            }
-        }
-        //Computing sum of all pair products
-        cur = 0;
-        for(int i = 0; i < temp.size(); i++){
-            ans2 += temp[i] * temp[i];
-            cur += temp[i];
-        }
-        ans2 = (cur * cur - ans2) / 2;
-        //The answer
-        cout << ans1 - ans2 << ' ';
-    } //Time complexity O(qn)
+        int left = lower_bound(all(weight), l) - weight.begin() - 1;
+        int right = upper_bound(all(weight), r) - weight.begin() - 1;
+        // cerr << left << ' ' << right << endl;
+        cout << preSum[right] - preSum[left] << ' ';
+    }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
