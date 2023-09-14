@@ -1,1 +1,1 @@
-{"name":"Local: E","url":"c:\\Users\\KIEN\\OneDrive\\Desktop\\UIT2023\\Day 2\\E.cpp","tests":[],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\KIEN\\OneDrive\\Desktop\\UIT2023\\Day 2\\E.cpp","group":"local","local":true}
+{"name":"Local: E","url":"c:\\Users\\KIEN\\OneDrive\\Desktop\\UIT2023\\Day 2\\E.cpp","tests":[{"id":1694684447060,"input":"1\n3\n2 3 3\n4\n7 3 5 2\n0","output":"PHV\nHPVV"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\KIEN\\OneDrive\\Desktop\\UIT2023\\Day 2\\E.cpp","group":"local","local":true}
