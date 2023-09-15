@@ -126,7 +126,6 @@ signed main() {
     #endif //ONLINE JUDGE
     solve();
 }
-
 /*A place to scribble thoughts
 
 */

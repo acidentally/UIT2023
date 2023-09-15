@@ -1,9 +1,9 @@
 /*
 Good luck for those who are trying your best
 May the most glorious victory come
-File name: G.cpp
+File name: G_debug.cpp
 Code by : acident / lckintrovert
-Created since : 15/09/2023 ~~ 08:19:19
+Created since : 15/09/2023 ~~ 22:59:46
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -38,16 +38,17 @@ typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
 int const maxn      =       2e5 + 10;
-int const INF       =       1e9 + 10;
+int const INF       =       1e18;
 
 struct Edge {
-    int u, v, w, idx;
+    int u, v, w, i;
     Edge() = default;
-    Edge(int u_, int v_, int w_, int i_) : u(u_), v(v_), w(w_), idx(i_) {}
-    bool operator < (const Edge &e) {
+    Edge(int u_, int v_, int w_, int i_) : u(u_), v(v_), w(w_), i(i_) {}
+    operator < (const Edge &e) {
         return w < e.w;
     }
 };
+vector<Edge> e;
 
 vi p;
 int find(int k) {
@@ -58,43 +59,34 @@ void connect(int u, int v) {
     u = find(u); v = find(v);
     p[u] = v;
 }
+//End of Edge and DSU;
 
-bool vis[maxn] = {};
-bool checkIdx[maxn] = {};
-int n, m, MulConst;
-int u, v, w, minW = INF, idx, START;
+
+
+int n, m, u, v, w, mulConst, START;
+bool checkEdge[maxn] = {}, found = 0;
 vi couting;
-vector<Edge> e;
 vector<pi> a[maxn] = {};
-
-bool dfs(int k, int p = -1) {
-    vis[k] = true;
+void dfs(int k, int type) {
+    // cerr << k << ' ';
+    if(k == START) {
+        couting.pb(type);
+        found = 1;
+        return;
+    }
     for(auto s : a[k]) {
-        if(checkIdx[s.se]) continue;
-        if(vis[s.fi]) {
-            START = s.fi;
-            couting.pb(s.se);
-            return 1;
-        }
-        checkIdx[s.se] = 1;
-        if(dfs(s.fi, k)) {
-            couting.pb(s.se);
-            if(k == START) {
-                reverse(all(couting));
-                cout << minW * minW + MulConst * couting.size() << endl;
-                cout << START << ' ' << couting.size() << endl;
-                for(auto s : couting) cout << s << ' ';
-                exit(0);
-            }
-            return 1;
+        if(checkEdge[s.se]) continue;
+        checkEdge[s.se] = 1;
+        dfs(s.fi, s.se);
+        if(found) {
+            couting.pb(type);
+            return;
         }
     }
-    return 0;
 }
-
-void solve() {
-    cin >> n >> m >> MulConst;
-    p.resize(n + 10);
+inline void solve() {
+    cin >> n >> m >> mulConst;
+    p.resize(n + 10); 
     for(int i = 1; i <= n; i++) p[i] = i;
     for(int i = 1; i <= m; i++) {
         cin >> u >> v >> w;
@@ -102,33 +94,31 @@ void solve() {
     }
     sort(all(e));
     for(auto s : e) {
-        w = s.w;
         u = find(s.u); v = find(s.v);
-        idx = s.idx;
-        if(u != v) {
-            connect(u, v);
-            a[s.u].pb(mp(s.v, idx));
-            a[s.v].pb(mp(s.u, idx));
-        } 
-        else if(u == v) {
-            minW = w;
-            a[s.u].pb(mp(s.v, idx));
-            a[s.v].pb(mp(s.u, idx));
-            dfs(s.v, -1);
-            dfs(s.u, -1);
-            break;
+        a[s.u].pb(mp(s.v, s.i));
+        a[s.v].pb(mp(s.u, s.i));
+        if(u == v) {
+            START = s.u;
+            for(auto thing : a[START]) {
+                checkEdge[thing.se] = 1;
+                dfs(thing.fi, thing.se);
+                checkEdge[thing.se] = 0;
+                if(found) break;
+            }
+            // couting.pb(w);
+            cout << s.w * s.w + mulConst * couting.size() << endl;
+            cout << START << ' ' << couting.size() << endl;
+            for(auto thing : couting) cout << thing << ' ';
+            exit(0);
         }
+        connect(u, v);
     }
-    cout << "Poor girl";    
+    cout << "Poor girl";
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    #ifdef ONLINE_JUDGE
-    freopen("ginger.INP", "r", stdin);
-    freopen("ginger.OUT", "w", stdout);
-    #endif //ONLINE JUDGE
-
+    //File?
     solve();
 }
 
