@@ -59,34 +59,26 @@ void connect(int u, int v) {
     p[u] = v;
 }
 
-bool vis[maxn] = {};
+bool vis[maxn] = {}, checkCanh[maxn] = {};
 int n, m, MulConst;
 int u, v, w, minW = INF, idx, START;
 vi couting;
 vector<Edge> e;
 vector<pi> a[maxn] = {};
 
-bool dfs(int k, int p) {
+bool dfs(int k, int p = -1) {
     vis[k] = true;
     for(auto s : a[k]) {
-        if(s.fi == p) continue; //Not revisiting parent
-        if(vis[s.fi]) { //If already visited in the DFS ~ found a cycle loop from s.fi back to
-                        //s.fi
+        if(checkCanh[s.se]) continue;
+        if(vis[s.fi]) {
             START = s.fi;
-            couting.pb(s.se); //Keep pushing the route into a vector
+            couting.pb(s.se);
             return 1;
         }
-        if(dfs(s.fi, k)) { 
-            couting.pb(s.se); 
-            if(k == START) { //If the current visitting node is the start
-                             //We start outputting the answer
-                reverse(all(couting)); //Trace back
-
-                cout << minW * minW + MulConst * couting.size() << endl; //The required answer
-                cout << START << ' ' << couting.size() << endl;
-                for(auto s : couting) cout << s << ' ';
-                exit(0);
-            }
+        checkCanh[s.se] = true;
+        if(dfs(s.fi, k)) {
+            couting.pb(s.se);
+            if(k == START) throw k;
             return 1;
         }
     }
@@ -95,33 +87,41 @@ bool dfs(int k, int p) {
 
 void solve() {
     cin >> n >> m >> MulConst;
-    //DSU initialization
     p.resize(n + 10);
     for(int i = 1; i <= n; i++) p[i] = i;
-    //End of DSU initialization
-
-    //Graph Inputting
     for(int i = 1; i <= m; i++) {
         cin >> u >> v >> w;
         e.pb(Edge(u, v, w, i));
     }
     sort(all(e));
-    //End of Graph Input
-
-    //Compute
     for(auto s : e) {
         w = s.w;
         u = find(s.u); v = find(s.v);
         idx = s.idx;
-        a[s.u].pb(mp(s.v, idx));
-        a[s.v].pb(mp(s.u, idx));
-        if(u == v) {
+        if(u != v) {
+            connect(u, v);
+            a[s.v].pb(mp(s.u, idx));
+            a[s.u].pb(mp(s.v, idx));
+        } 
+        else if(minW == INF) {
             minW = w;
-            dfs(s.v, -1);
+            a[s.v].pb(mp(s.u, idx));
+            a[s.u].pb(mp(s.v, idx));
         }
-        connect(u, v);
     }
-    cout << "Poor girl";
+    if(minW == INF) {
+        cout << "Poor girl";
+        return;
+    }
+    try{dfs(e[0].u);} catch(int x) {}
+    if(couting.empty()) {
+        cout << "Poor girl";
+        return;
+    }
+    reverse(all(couting));
+    cout << minW * minW + MulConst * ((long long)couting.size()) << endl;
+    cout << START << ' ' << couting.size() << endl;
+    for(auto s : couting) cout << s << ' ';
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
@@ -130,7 +130,6 @@ signed main() {
     freopen("ginger.INP", "r", stdin);
     freopen("ginger.OUT", "w", stdout);
     #endif //ONLINE JUDGE
-
     solve();
 }
 

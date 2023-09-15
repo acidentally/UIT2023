@@ -60,6 +60,7 @@ void connect(int u, int v) {
 }
 
 bool vis[maxn] = {};
+bool checkIdx[maxn] = {};
 int n, m, MulConst;
 int u, v, w, minW = INF, idx, START;
 vi couting;
@@ -69,21 +70,22 @@ vector<pi> a[maxn] = {};
 bool dfs(int k, int p = -1) {
     vis[k] = true;
     for(auto s : a[k]) {
-        if(s.fi == p) continue;
+        if(checkIdx[s.se]) continue;
         if(vis[s.fi]) {
             START = s.fi;
             couting.pb(s.se);
             return 1;
         }
+        checkIdx[s.se] = 1;
         if(dfs(s.fi, k)) {
-            if(s.fi == START) {
+            couting.pb(s.se);
+            if(k == START) {
                 reverse(all(couting));
                 cout << minW * minW + MulConst * couting.size() << endl;
                 cout << START << ' ' << couting.size() << endl;
                 for(auto s : couting) cout << s << ' ';
                 exit(0);
             }
-            couting.pb(s.se);
             return 1;
         }
     }
@@ -105,24 +107,19 @@ void solve() {
         idx = s.idx;
         if(u != v) {
             connect(u, v);
-            a[s.v].pb(mp(s.u, idx));
             a[s.u].pb(mp(s.v, idx));
+            a[s.v].pb(mp(s.u, idx));
         } 
-        else if(minW == INF) {
+        else if(u == v) {
             minW = w;
-            a[s.v].pb(mp(s.u, idx));
             a[s.u].pb(mp(s.v, idx));
+            a[s.v].pb(mp(s.u, idx));
+            dfs(s.v, -1);
+            dfs(s.u, -1);
+            break;
         }
     }
-    dfs(1);
-    if(couting.empty()) {
-        cout << "Poor girl";
-        return;
-    }
-    reverse(all(couting));
-    cout << minW * minW + MulConst * couting.size() << endl;
-    cout << START << ' ' << couting.size() << endl;
-    for(auto s : couting) cout << s << ' ';
+    cout << "Poor girl";    
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
@@ -131,6 +128,7 @@ signed main() {
     freopen("ginger.INP", "r", stdin);
     freopen("ginger.OUT", "w", stdout);
     #endif //ONLINE JUDGE
+
     solve();
 }
 
