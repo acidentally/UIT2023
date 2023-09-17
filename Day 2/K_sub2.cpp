@@ -3,7 +3,7 @@ Good luck for those who are trying your best
 May the most glorious victory come
 File name: K_sub2.cpp
 Code by : acident / lckintrovert
-Created since : 16/09/2023 ~~ 09:37:30
+Created since : 17/09/2023 ~~ 07:35:49
 Literally the worst cp-er ever
 */
 #include <bits/stdc++.h>
@@ -37,38 +37,49 @@ typedef vector<vi>          vvi;
 typedef pair<int, int>      pi;
 typedef pair<int, pi>       pii;
 int const mod       =       1e9 + 7;
-int const maxn      =       1e2 + 10;
-int const INF       =       1e18;
+int const maxn      =       3e5 + 10;
 
-mt19937_64 rng(time(0));
-
-inline void solve() {
-    string ans[100] = {}, s;
-    int l = 35;
-    // int n = rand() % maxn;
-    int n = 40;
-    cout << n << ' ' << l << endl;
-    for(int i = 1; i <= n; i++){
-        int l1 = rng() % l;
-        int l2 = rng() % l;
-        while(l2 == l1) l2 = rng() % l;
-        cout << l1 + 1 << ' ' << l2 + 1 << endl;
+int n, k;
+int p[maxn] = {}, sz[maxn] = {}, edge[maxn] = {};
+int find(int k) {
+    if(k == p[k]) return k;
+    return p[k] = find(p[k]);
+}
+void connect(int u, int v) {
+    u = find(u); 
+    v = find(v);
+    if(u != v) {
+        p[u] = v;
+        sz[v] += sz[u];
+        edge[v] += edge[u] + 1;
     }
-    // for(int i = 1; i <= 97; i++) {
-    //     cin >> ans[i];
-    // }
-    // for(int i = 1; i <= 97; i++) {
-    //     cin >> s;
-    //     if(ans[i] != s) cout << "WA ON TEST " << i << endl;
-    // }
+    else {
+        edge[u]++;
+    }
+}
+int u, v;
+inline void solve() {
+    cin >> n >> k;
+    for(int i = 1; i <= k; i++) {
+        p[i] = i; sz[i] = 1; edge[i] = 0;
+    }
+    for(int i = 1; i <= n; i++) {
+        cin >> u >> v;
+        int u_ = find(u);
+        int v_ = find(v);
+        if(edge[u_] < sz[u_] || edge[v_] < sz[v_]) {
+            cout << "Yes" << endl;
+        } else cout << "No" << endl;
+        connect(u, v);
+    }
 }
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    // #ifdef ONLINE_JUDGE
-    // freopen("trau.IN", "r", stdin);
-    freopen("trau.IN", "w", stdout);
-    // #endif //ONLINE JUDGE
+    #ifdef ONLINE_JUDGE
+    freopen("ladice.INP", "r", stdin);
+    freopen("ladice.OUT", "w", stdout);
+    #endif //ONLINE JUDGE
     solve();
 }
 
