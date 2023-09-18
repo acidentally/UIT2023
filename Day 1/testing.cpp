@@ -52,7 +52,10 @@ inline void solve() {
 signed main() {
     ios_base:: sync_with_stdio(0);
     cin.tie(NULL); cout.tie(NULL);
-    //File?
+    #ifdef ONLINE_JUDGE
+    freopen("testing.INP", "r", stdin);
+    freopen("testing.OUT", "w", stdout);
+    #endif //ONLINE JUDGE
     solve();
 }
 
