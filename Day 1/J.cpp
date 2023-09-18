@@ -44,8 +44,9 @@ int const INF       =       1e18;
 class Compare {
 public:
     bool operator() (pis s1, pis s2) {
-        if(s1.se.empty()) return 1;
-        return *s1.se.begin() >= *s2.se.begin();
+        if(s1.se.empty()) return 0;
+        if(s2.se.empty()) return 1;
+        return *s1.se.begin() > *s2.se.begin();
     }
 };
 int cmp(set<int, greater<int> > s1, set<int, greater<int> > s2) {
@@ -55,7 +56,7 @@ int cmp(set<int, greater<int> > s1, set<int, greater<int> > s2) {
     }
     if(p1 == s1.end() && p2 == s2.end()) return 0; //return 0 khi bằng nhau
     if(p1 == s1.end()) return -1;
-    if(p2 == s1.end()) return 1;
+    if(p2 == s2.end()) return 1;
     if(*p1 > *p2) return 1;
     return -1;
 }
@@ -72,15 +73,15 @@ void Dijkstra(void) {
     while(!pq.empty()) {
         u = pq.top().fi; du = pq.top().se;
         pq.pop();
-        if(cmp(du, d[u])) continue;
+        if(cmp(du, d[u]) != 0) continue;
         for(auto s : a[u]) {
             temp = d[u];
             v = s.fi; dv = s.se;
             ptr = temp.find(dv);
-            while(!temp.empty() && ptr != temp.end()) {
-                temp.erase(ptr);
+            while(ptr != temp.end() && *ptr == dv) {
+                ptr++;
+                temp.erase(dv);
                 dv++;
-                ptr = temp.find(dv);
             }
             temp.ins(dv);
             if(cmp(temp, d[v]) == -1) {
