@@ -46,19 +46,17 @@ public:
     bool operator() (pis s1, pis s2) {
         if(s1.se.empty()) return 0;
         if(s2.se.empty()) return 1;
-        return *s1.se.begin() > *s2.se.begin();
+        return *s1.se.begin() < *s2.se.begin();
     }
 };
-int cmp(set<int, greater<int> > s1, set<int, greater<int> > s2) {
+short cmp(set<int, greater<int> > s1, set<int, greater<int> > s2) {
     set<int, greater<int> >::iterator p1 = s1.begin(), p2 = s2.begin();
-    while(p1 != s1.end() && p2 != s2.end() && *p1 == *p2) {
-        p1++; p2++;
-    }
+    while(p1 != s1.end() && p2 != s2.end() && *p1 == *p2) {p1++; p2++;}
     if(p1 == s1.end() && p2 == s2.end()) return 0; //return 0 khi bằng nhau
-    if(p1 == s1.end()) return -1;
-    if(p2 == s2.end()) return 1;
-    if(*p1 > *p2) return 1;
-    return -1;
+    else if(p1 == s1.end()) return -1;
+    else if(p2 == s2.end()) return 1;
+    else if(*p1 > *p2) return 1;
+    else return -1;
 }
 //Dijkstra time
 set<int, greater<int> > d[maxn] = {}, du, temp;
@@ -86,7 +84,7 @@ void Dijkstra(void) {
             temp.ins(dv);
             if(cmp(temp, d[v]) == -1) {
                 d[v] = temp;
-                pq.push(mp(v, d[v]));
+                pq.push(mp(v, temp));
             }
         }
     }
@@ -125,7 +123,7 @@ signed main() {
     freopen("Dijkstra.INP", "r", stdin);
     freopen("Dijkstra.OUT", "w", stdout);
     #endif //ONLINE JUDGE
-    cin >> n; //(subtast)//
+    cin >> n; //(subtask)//
     solve();
 }
 
